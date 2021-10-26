@@ -50,81 +50,85 @@ if (!$change) {
     $products = $sandwichs;
 }
 
+//______________________________________________________
 // var_dump($products);
+//______________________________________________________
 
 //error variables to holds error messages
+function test_input($data)
+{
 
-function test_input($data) {
-
-    // trim removes special characters, but can also be specified to trim certain letters in a string.
+    //
     $data = trim($data);
-    // removes any slashes that might occur.
+    //
     $data = stripslashes($data);
-    // Convert the predefined characters "<" (less than) and ">" (greater than) to HTML entities.
+    //
     $data = htmlspecialchars($data);
     return $data;
 }
 
 $emailErr = $streetErr = $streetNumberErr = $cityErr = $zipCodeErr = "";
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //email is empty
-    if(empty($_POST['email'])){
+    if (empty($_POST['email'])) {
         $emailErr = "email is required";
-    }else{
+    } else {
         $email = test_input($_POST['email']);
-        
+
         //check the format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $emailErr = "Invalid email format";
         }
+
+        // $_SESSION['email'] = $email;
     }
 
     //street is empty
-    if(empty($_POST['street'])){
+    if (empty($_POST['street'])) {
         $streetErr = "street name is required";
-    }else{
+    } else {
         $street = test_input($_POST['street']);
-
-        //check format
-        if (!preg_match("/^[a-zA-Z-' ]*$/",$street)) {
-            $streetErr = "Only letters and white space allowed";
-        }
+        $_SESSION['street'] = $street;
     }
 
     //street number is empty
-    if(empty($_POST['streetnumber'])){
+    if (empty($_POST['streetnumber'])) {
         $streetNumberErr = "street number is required";
-    }elseif(is_numeric($_POST['streetnumber'])){
+    } elseif (is_numeric($_POST['streetnumber'])) {
         $streetNumber = test_input($_POST['streetnumber']);
-    }else{
+        $_SESSION['streetnumber'] = $streetNumber;
+    } else {
         $streetNumberErr = "street number must be a number";
     }
 
     //city is empty
-    if(empty($_POST['city'])){
+    if (empty($_POST['city'])) {
         $cityErr = "city is  namerequired";
-    }else{
+    } else {
         $city = test_input($_POST['city']);
-
-        //check format
-        if (!preg_match("/^[a-zA-Z-' ]*$/",$street)) {
-            $cityErr = "Only letters and white space allowed";
-        }
+        $_SESSION['city'] = $city;
     }
 
     //zipcode is empty
-    if(empty($_POST['zipcode'])){
-        $zipCodeErr = "zipcode is  namerequired";
-    }elseif(is_numeric($_POST('zipcode'))){
-        $zipCode = test_input($_POST['zipcode']);
-    }else{
-        $zipCodeErr =  "zipcode must be a number";
+    //_______________________________________________________
+    // if (empty($_POST['zipcode'])) {
+    //     $zipCodeErr = "zipcode is required";
+    // } elseif (is_numeric($_POST('zipcode'))) {
+    //     $zipCode = test_input($_POST['zipcode']);
+    //     $_SESSION['zipcode'] = $zipCode;
+    // } else {
+    //     $zipCodeErr =  "zipcode must be a number";
+    // }
+    //____________________[a-zA-Z\d]{3}________________
+    if (empty($_POST["zipcode"]) || !preg_match('/^[0-9]+$/', $_POST["zipcode"])) {
+        $zipCodeErr = " Zipcode is required";
+    } else {
+        $zipCode = ($_POST["zipcode"]);
+        $_SESSION['zipcode'] = $zipCode;
     }
-
-
-   
 }
+//___________________________________________________________
 // if (isset($_POST['button'])) {
 
 //     $email = $_POST['email'];
@@ -140,5 +144,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 //         header("Location: ../form-view.php?error=invalidnumber&email=" . $email . "street=" . $street . "&streetnumber=" . $streetNumber . "&city=" . $city . "&zipcode=" . $zipCode);
 //     }
 // }
+//______________________________________________________________________
 
 require 'form-view.php';
