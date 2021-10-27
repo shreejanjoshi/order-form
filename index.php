@@ -175,14 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // $totalValue = $drinkValue + $sandwichValue;
 
-        if (isset($_POST['express_delivery'])) {
-            $send = "Your product will be arrive with in 20 min.";
-            // $_SESSION['express_delivery'] = $send;
-            $totalValue = $totalValue + 5;
-        } else {
-            $send = "Your product will be arrive with in 45 min.";
-            // $_SESSION['express_delivery'] = $send;
-        }
+
     }
     $_SESSION['totalCost'] = $totalValue;
 }
@@ -190,6 +183,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if (isset($_POST['restart'])) {
 
     session_unset();
+}
+
+if (isset($_POST['done'])) {
+
+    //clint
+    $to = $_SESSION['email'];
+
+    //subject
+    $subject = "The food you order";
+
+    //message
+    $message = "<h1>Hello</h1><p>Thank you for ordering food from our restaurant.<br> Your food will arrive shortly in your address</p>";
+
+    //send mail
+    mail($to, $subject, $message, $headers);
+
+    if (isset($_POST['express_delivery'])) {
+        $send = "Your product will be arrive with in 20 min.";
+        // $_SESSION['express_delivery'] = $send;
+        $totalValue = $totalValue + 5;
+    } else {
+        $send = "Your product will be arrive with in 45 min.";
+        // $_SESSION['express_delivery'] = $send;
+    }
 }
 //___________________________________________________________
 // if (isset($_POST['button'])) {
