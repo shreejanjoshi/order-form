@@ -17,6 +17,9 @@ function whatIsHappening()
     var_dump($_SESSION);
 }
 
+whatIsHappening();
+
+
 //your products with their price.
 $sandwichs = [
     ['name' => 'Club Ham', 'price' => 3.20],
@@ -75,13 +78,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $emailErr = "email is required";
     } else {
         $email = test_input($_POST['email']);
+        $_SESSION['email'] = $email;
 
         //check the format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $emailErr = "Invalid email format";
         }
-
-        // $_SESSION['email'] = $email;
     }
 
     //street is empty
@@ -112,21 +114,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //zipcode is empty
     //_______________________________________________________
-    // if (empty($_POST['zipcode'])) {
-    //     $zipCodeErr = "zipcode is required";
-    // } elseif (is_numeric($_POST('zipcode'))) {
-    //     $zipCode = test_input($_POST['zipcode']);
-    //     $_SESSION['zipcode'] = $zipCode;
-    // } else {
-    //     $zipCodeErr =  "zipcode must be a number";
-    // }
-    //____________________[a-zA-Z\d]{3}________________
-    if (empty($_POST["zipcode"]) || !preg_match('/^[0-9]+$/', $_POST["zipcode"])) {
-        $zipCodeErr = " Zipcode is required";
-    } else {
-        $zipCode = ($_POST["zipcode"]);
+    if (empty($_POST['zipcode'])) {
+        $zipCodeErr = "zipcode is required";
+    } elseif (preg_match('/^[0-9]+$/', $_POST["zipcode"])) {
+        $zipCode = test_input($_POST['zipcode']);
         $_SESSION['zipcode'] = $zipCode;
+    } else {
+        $zipCodeErr =  "zipcode must be a number";
     }
+    //____________________[a-zA-Z\d]{3}________________
+    // if (empty($_POST["zipcode"]) || !preg_match('/^[0-9]+$/', $_POST["zipcode"])) {
+    //     $zipCodeErr = " Zipcode is required";
+    // } else {
+    //     $zipCode = ($_POST["zipcode"]);
+    //     $_SESSION['zipcode'] = $zipCode;
+    // }
+    //___________________________________________________________
+
+    //if no error is found then process this
+    if (!$emailErr && !$streetErr && !$streetNumberErr && !$cityErr && !$zipCodeErr) {
+
+        //________________________________________________________
+        // $productsPrice = isset($_POST['products']);
+
+        // foreach($productsPrice as $productsPrices){
+        //     $totalValue = $totalValue + $productsPrices;
+        // }
+        // ___________________________________________________________
+        // if (isset($_POST['products']['i'])) {
+        //     $totalValue = $totalValue + $_POST['price'];
+        // }
+        //_______________________________________________________________
+
+        foreach ($products as $i => $product) {
+            if (isset($_POST['products'][$i])) {
+                $totalValue = $totalValue + $product['price'];
+            }
+        }
+
+        // foreach ($drinks as $i => $drink) {
+        //     if (isset($_POST['drinks'][$i])) {
+        //         $drinkValue = $totalValue + $drink['price'];
+        //     }
+        // }
+
+        // foreach ($sandwichs as $i => $sandwich) {
+        //     if (isset($_POST['sandwichs'][$i])) {
+        //         $sandwichValue = $totalValue + $drink['price'];
+        //     }
+        // }
+
+        // $totalValue = $drinkValue + $sandwichValue;
+
+        if (isset($_POST['express_delivery'])) {
+            $send = "Your product will be arrive with in 20 min.";
+            // $_SESSION['express_delivery'] = $send;
+            $totalValue = $totalValue + 5;
+        } else {
+            $send = "Your product will be arrive with in 45 min.";
+            // $_SESSION['express_delivery'] = $send;
+        }
+    }
+    $_SESSION['totalCost'] = $totalValue;
 }
 //___________________________________________________________
 // if (isset($_POST['button'])) {
