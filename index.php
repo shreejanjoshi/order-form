@@ -146,21 +146,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // }
         //_______________________________________________________________
 
-        foreach ($products as $i => $product) {
-            if (isset($_POST['products'][$i])) {
-                $totalValue = $totalValue + $product['price'];
+
+        if (isset($_SESSION['totalCost'])) {
+            $totalValue = $_SESSION['totalCost'];
+        }
+        if (isset($_POST['products'][$i])) {
+            foreach ($_POST['products'] as $i => $product) {
+                $totalValue = $totalValue + $product;
             }
         }
 
+        // if (isset($_)) {
+        //     $totalValue = $totalValue + $product['price'];
+        // }
+
+        // $checkboxes = isset($_POST['products']) ? $_POST['products'] : array();
+        // foreach ($checkboxes as $value) {
+        //     //value only shows the price, products shows the word array, products['name returns empty string];
+
+        //     $totalValue += $value;
+        // }
+
         // foreach ($drinks as $i => $drink) {
-        //     if (isset($_POST['drinks'][$i])) {
+        //     if (isset($_POST['$drinks'][$i])) {
         //         $drinkValue = $totalValue + $drink['price'];
         //     }
         // }
 
         // foreach ($sandwichs as $i => $sandwich) {
-        //     if (isset($_POST['sandwichs'][$i])) {
-        //         $sandwichValue = $totalValue + $drink['price'];
+        //     if (isset($_POST['$sandwichs'][$i])) {
+        //         $sandwichValue = $totalValue + $sandwich['price'];
         //     }
         // }
 
