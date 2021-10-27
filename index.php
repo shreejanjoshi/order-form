@@ -17,8 +17,6 @@ function whatIsHappening()
     var_dump($_SESSION);
 }
 
-whatIsHappening();
-
 
 //your products with their price.
 $sandwichs = [
@@ -146,19 +144,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // }
         //_______________________________________________________________
 
-
         if (isset($_SESSION['totalCost'])) {
             $totalValue = $_SESSION['totalCost'];
         }
-        if (isset($_POST['products'][$i])) {
-            foreach ($_POST['products'] as $i => $product) {
-                $totalValue = $totalValue + $product;
+
+        foreach ($products as $i => $product) {
+            if (isset($_POST['products'][$i])) {
+                $totalValue = $totalValue + $product['price'];
             }
         }
-
-        // if (isset($_)) {
-        //     $totalValue = $totalValue + $product['price'];
-        // }
 
         // $checkboxes = isset($_POST['products']) ? $_POST['products'] : array();
         // foreach ($checkboxes as $value) {
@@ -191,6 +185,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     $_SESSION['totalCost'] = $totalValue;
+}
+
+if (isset($_POST['restart'])) {
+
+    session_unset();
 }
 //___________________________________________________________
 // if (isset($_POST['button'])) {

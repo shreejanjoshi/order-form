@@ -87,10 +87,14 @@
                 Express delivery (+ 5 EUR)
             </label>
 
-            <button type="submit" class="btn btn-primary" nume="button">Order!</button>
+            <button type="submit" class="btn btn-primary" name="button">Order!</button>
+            <button type="submit" class="btn btn-primary" name="restart">Restart</button>
+            <button type="submit" class="btn btn-primary" name="done">Done</button>
         </form>
 
-        <footer>You already ordered <strong>&euro; <?php echo $_SESSION['totalCost'] ?></strong> in food and drinks.</footer>
+        <footer>You already ordered <strong>&euro; <?php if (isset($_SESSION['totalCost'])) {
+                                                        echo $_SESSION['totalCost'];
+                                                    } ?></strong> in food and drinks.</footer>
         <span><?php echo $send; ?></span>
     </div>
 
